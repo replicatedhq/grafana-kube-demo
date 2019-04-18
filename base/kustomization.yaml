@@ -1,0 +1,15 @@
+kind: ""
+apiversion: ""
+resources:
+- clusterrole.yaml
+- clusterrolebinding.yaml
+- configmap.yaml
+- deployment.yaml
+- podsecuritypolicy.yaml
+- role.yaml
+- rolebinding.yaml
+- secret.yaml
+- service.yaml
+- serviceaccount.yaml
+- tests/test-configmap.yaml
+- tests/test.yaml

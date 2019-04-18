@@ -1,0 +1,88 @@
+---
+# kind: replicated
+
+replicated_api_version: 2.29.0
+name: "Grafana Pro"
+
+properties:
+  app_url: http://{{repl ConfigOption "hostname" }}
+  console_title: "Grafana Pro"
+  logo_url: "https://i1.wp.com/homelabrat.com/wp-content/uploads/2018/07/grafana-logo.png?ssl=1"
+
+host_requirements:
+  replicated_version: ">=2.34.0"
+
+kubernetes:
+  requirements:
+    total_cores: "2"
+    total_memory: 8GB
+
+config:
+- name: basic_config
+  title: Basics
+  description: Please enter the hostname or IP of this serrver.
+  items:
+  - name: hostname
+    title: Hostname
+    value: '{{repl ConsoleSetting "tls.hostname" }}'
+    type: text
+    required: true
+    test_proc:
+      display_name: Check DNS
+      command: resolve_host
+- name: grafana
+  title: Grafana Settings
+  items:
+    - name: memory_request
+      title: Memory request
+      type: text
+      default: 256Mi
+- name: auth
+  title: Authentication Settings
+  items:
+    - name: auth_type
+      title: Auth type
+      type: select_one
+      default: builtin
+      items:
+        - name: builtin
+          title: Username/Password auth
+        - name: ldap
+          title: LDAP authentication
+    - name: admin_user
+      title: Admin Username
+      help_text: Choose a username for the admin user
+      type: text
+      when: '{{repl ConfigOptionEquals "auth_type" "builtin"}}'
+    - name: admin_password
+      title: Admin Password
+      help_text: Choose a password for the admin user
+      type: text
+      when: '{{repl ConfigOptionEquals "auth_type" "builtin"}}'
+    - name: ldap_toml
+      title: LDAP toml configuration
+      help_text: Provide a TOML file to configure grafana's LDAP settings
+      type: textarea
+      when: '{{repl ConfigOptionEquals "auth_type" "ldap"}}'
+
+- name: server
+  title: Server Config
+  items:
+    - name: db_url
+      title: Database URL
+      type: text
+      required: true
+      default: postgres://pg.somebigbank.com/my_database?username=xxx&password=yyy
+    - name: nginx_memory
+      title: Nginx Memory
+      type: text
+      default: 100Mi
+
+images:
+# this section needs to be included for airgap installs
+- name: k8s.gcr.io/echoserver
+  source: public
+  tag: "1.4"
+
+---
+# kind: scheduler-kubernetes

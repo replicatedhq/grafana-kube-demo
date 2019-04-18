@@ -1,0 +1,110 @@
+assets:
+  v1:
+    - github:
+        repo: replicatedhq/grafana-kube-demo
+        path: /base
+        dest: ./
+        ref: master
+    - github:
+        repo: replicatedhq/grafana-kube-demo
+        path: /scripts
+        dest: ./
+        ref: master
+config:
+  v1:
+    - name: kubernetes
+      title: Kubernetes
+      items:
+        - name: namespace
+          title: Kubernetes Namespace to deploy Grafana Pro into
+          type: text
+          default: "default"
+    - name: grafana
+      title: Grafana Settings
+      items:
+        - name: memory_request
+          title: Memory request
+          type: text
+          default: 256Mi
+    - name: auth
+      title: Authentication Settings
+      items:
+        - name: auth_type
+          title: Auth type
+          type: select_one
+          default: builtin
+          items:
+            - name: builtin
+              title: Username/Password auth
+            - name: ldap
+              title: LDAP authentication
+        - name: admin_user
+          title: Admin Username
+          help_text: Choose a username for the admin user
+          type: text
+          when: '{{repl ConfigOptionEquals "auth_type" "builtin"}}'
+        - name: admin_password
+          title: Admin Password
+          help_text: Choose a password for the admin user
+          type: text
+          when: '{{repl ConfigOptionEquals "auth_type" "builtin"}}'
+        - name: ldap_toml
+          title: LDAP toml configuration
+          help_text: Provide a TOML file to configure grafana's LDAP settings
+          type: textarea
+          when: '{{repl ConfigOptionEquals "auth_type" "ldap"}}'
+
+
+lifecycle:
+  v1:
+    - message:
+        contents: |
+          # Grafana Pro installer
+
+          Welcome to the Grafana Pro installer!
+
+          This tool will walk you through setting up Grafana Pro
+          to run in kubernetes.
+
+          ## Prerequisites
+
+          - An existing Kubernetes Cluster
+          - At least 500m CPU / 256M memory available for scheduling
+          - If you'd like to use LDAP for authentication, you'll need to prepare an
+            [ldap.toml file](https://grafana.com/docs/installation/configuration/#auth-ldap)
+
+    - config:
+        invalidates: ["render"]
+    - render:
+        requires: ["config"]
+        root: .
+    - message:
+        contents: |
+          # Customize your Kubernetes configs
+
+          Base kubernetes assets have been generated for deploying Grafana Pro to your Kubernetes cluster.
+
+          The next step will walk you through adding any last-mile customizations to Kubernetes configurations
+          before deploying them to your cluster.
+
+          This will give you an opportunity to customize default configuration values,
+          and add any additional Kubernetes settings in a way that will preserve your
+          customizations when pulling in upstream updates for Grafana Pro
+
+          We recommend reviewing the Kubernetes resources and making any tweaks to the defaults.
+
+    - kustomizeIntro: {}
+    - kustomize:
+        requires: ["render"]
+        base: ./base
+        overlay: overlays/ship
+        dest: grafana-pro.yaml
+    - message:
+        id: outro
+        contents: |
+          ## You're all set!
+
+          If you have `kubectl` configured locally, you can deploy Grafana Pro by running
+
+              kubectl apply -f grafana-pro.yaml
+

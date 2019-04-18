@@ -1,0 +1,6 @@
+apiVersion: ""
+kind: ""
+bases:
+  - ../../base
+resources:
+  - resource-ingress.yaml

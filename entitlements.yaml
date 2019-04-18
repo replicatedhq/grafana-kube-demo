@@ -1,0 +1,27 @@
+---
+- name: Unique Datasources Allowed
+  key: datasources_allowed
+  type: integer
+  default: "30"
+- name: Enable Loki
+  key: enable_loki_storage
+  type: integer
+  default: "1"
+- name: Number of User Logins Allowed
+  key: num_seats
+  type: integer
+  default: "30"
+- name: Enable Heatmap Panels
+  key: enable_heatmap_panels
+  type: integer
+  default: "1"
+- name: Default Welcome Screen Config
+  key: welcome_screen_markdown
+  type: text
+  default: |
+    ### Hello <customer>!
+
+    Welcome to your Grafana Pro Install. We hope you enjoy Grafana Pro! If you have any questions, please dont hesitate to contact our team.
+
+    Happy Graphing!
+
