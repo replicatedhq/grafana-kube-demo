@@ -5,7 +5,7 @@ replicated_api_version: 2.29.0
 name: "Grafana Pro"
 
 properties:
-  app_url: http://{{repl ConfigOption "hostname" }}
+  app_url: http://{{repl ConfigOption "hostname" }}:3000
   console_title: "Grafana Pro"
   logo_url: "https://i1.wp.com/homelabrat.com/wp-content/uploads/2018/07/grafana-logo.png?ssl=1"
 

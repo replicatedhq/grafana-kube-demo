@@ -2,5 +2,5 @@ apiVersion: ""
 kind: ""
 bases:
   - ../../base
-resources:
-  - resource-ingress.yaml
+patches:
+  - patch-service-nodeport.yaml
