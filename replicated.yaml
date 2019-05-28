@@ -84,5 +84,46 @@ images:
   source: public
   tag: "1.4"
 
+
+custom_metrics:
+  - target: stats.gauges.retraced.api.EventCreater.createEvent.timer.*
+    retention: "1s:10m,1m:20m,1h:30d"
+    aggregation_method: "max"
+    xfiles_factor: 0.3
+
+monitors:
+  custom:
+    - name: Action Throughput
+      targets:
+        - stats.gauges.retraced.api.EventCreater.createEvent.timer.m1_rate
+      from: "-30minutes"
+      until: "-1minutes"
+      display:
+        label_unit: Ops/s
+        label_scale: metric
+        label_min: 0
+        label_max: 10
+        label_range_override: true
+        label_count: 2
+        fill_color: rgba(100, 0, 50, 0.5)
+        stroke_color: "#aa272f"
+        css_class_name: app1-custom-metrics
+
+    - name: Event Latency
+      targets:
+        - stats.gauges.retraced.api.EventCreater.createEvent.timer.p95
+      from: "-30minutes"
+      until: "-1minutes"
+      display:
+        label_unit: ms
+        label_scale: metric
+        label_min: 0
+        label_max: 50
+        label_range_override: true
+        label_count: 2
+        fill_color: rgba(100, 0, 50, 0.5)
+        stroke_color: "#aa272f"
+        css_class_name: app1-custom-metrics
+
 ---
 # kind: scheduler-kubernetes
