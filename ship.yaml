@@ -5,11 +5,6 @@ assets:
         path: /base
         dest: ./
         ref: master
-    - github:
-        repo: replicatedhq/grafana-kube-demo
-        path: /scripts
-        dest: ./
-        ref: master
 config:
   v1:
     - name: kubernetes
