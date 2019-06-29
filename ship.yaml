@@ -93,7 +93,7 @@ lifecycle:
         requires: ["render"]
         base: ./base
         overlay: overlays/ship
-        dest: grafana-pro.yaml
+        dest: rendered.yaml
     - message:
         id: outro
         contents: |
@@ -101,5 +101,5 @@ lifecycle:
 
           If you have `kubectl` configured locally, you can deploy Grafana Pro by running
 
-              kubectl apply -f grafana-pro.yaml
+              kubectl apply -f rendered.yaml
 
