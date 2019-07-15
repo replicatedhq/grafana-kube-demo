@@ -1,0 +1,46 @@
+analyze:
+  v1:
+    - name: availableReplicas
+      insight:
+        primary: '{{repl .availableReplicas}} Replicas'
+        detail: '{{repl .availableReplicas}} Replicas are available'
+        severity: info
+      registerVariables:
+        - name: deployments
+          fileMatch:
+            pathRegexps:
+              - scheduler/kubernetes/resources/deployments/resource\.json
+            identity: {}
+        - name: availableReplicas
+          eval: '{{repl .deployments | jq ".items[] | select(.metadata.name==\"grafana\") | .status.replicas" | jqMessagesToString | float64 | int }}'
+      evaluateConditions:
+        - condition:
+            numberCompare:
+              gte: 1
+            variableRef: availableReplicas
+          insightOnFalse:
+            primary: Down
+            detail: '{{repl .availableReplicas}} Replicas are available'
+            severity: error
+    - name: nodeDiskPressure
+      insight:
+        primary: 'Disk OK'
+        detail: 'No nodes are experiencing disk pressure.'
+        severity: debug
+      registerVariables:
+        - name: nodes
+          fileMatch:
+            pathRegexps:
+              - scheduler/kubernetes/resources/nodes/resource\.json
+            identity: {}
+        - name: diskPressureNodeName
+          eval: '{{repl .nodes | jq ".items[] | select(.status.conditions[2].status==\"True\") | .metadata.name" }}'
+      evaluateConditions:
+        - condition:
+            stringCompare:
+              eq: "[]"
+            variableRef: diskPressureNodeName
+          insightOnFalse:
+            primary: Disk Pressure
+            detail: 'Nodes {{repl .diskPressureNodeName}} experiencing disk pressure. Workloads will be degraded or evicted. Consider increasing disk size.'
+            severity: error
