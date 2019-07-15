@@ -91,7 +91,7 @@ custom_metrics:
   - target: stats.gauges.retraced.api.EventCreater.createEvent.timer.*
     retention: "10s:10m,1m:20m,1h:30d"
     aggregation_method: "max"
-    xfiles_factor: 0
+    xfiles_factor: 0.3
 
 monitors:
   custom:
