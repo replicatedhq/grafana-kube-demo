@@ -34,7 +34,7 @@ spec:
         image: grafana/grafana:6.1.3
         imagePullPolicy: IfNotPresent
         livenessProbe:
-          failureThreshold: 10
+          failureThreshold: 9
           httpGet:
             path: /api/health
             port: 3000
