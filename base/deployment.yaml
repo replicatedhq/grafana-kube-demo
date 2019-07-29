@@ -6,7 +6,7 @@ metadata:
     release: grafana
   name: grafana
 spec:
-  replicas: 4
+  replicas: 45
   selector:
     matchLabels:
       app: grafana
