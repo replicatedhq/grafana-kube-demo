@@ -4,6 +4,7 @@ metadata:
   labels:
     app: grafana
     release: grafana
+    vendor: kots
   name: grafana
 spec:
   replicas: 45
