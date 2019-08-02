@@ -4,7 +4,7 @@ metadata:
   labels:
     app: grafana
     release: grafana
-    vendor: happy
+    vendor: replik8s
   name: grafana
 spec:
   replicas: 4
