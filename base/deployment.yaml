@@ -40,7 +40,7 @@ spec:
             path: /api/health
             port: 3000
           initialDelaySeconds: 600
-          timeoutSeconds: 302
+          timeoutSeconds: 301
         name: grafana
         ports:
         - containerPort: 80
